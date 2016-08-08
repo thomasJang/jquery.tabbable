@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/ax5ui/ax5core/master/dist/ax5core.min.js"></script>
+    <script type="text/javascript" src="jquery.tabbable.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body style="padding: 20px;">
+
+<form id="myform">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" data-return-tab="false"/>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputFile">File input</label>
+        <input type="file" id="exampleInputFile">
+        <p class="help-block">Example block-level help text here.</p>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> Check me out
+        </label>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+<script>
+
+    var return_tab = {
+        "init": function (parent) {
+            parent.on("keydown.return-tab", "input, select", function (e) {
+                var useTab = this.getAttribute("data-return-tab");
+                if (useTab == "false") return this;
+                if (ax5.info.eventKeys.RETURN == e.which) {
+                    ax5.util.stopEvent(e);
+                    if (e.shiftKey) {
+                        $.focusPrev();
+                    } else {
+                        $.focusNext();
+                    }
+                }
+            });
+        },
+        "off": function () {
+            parent.off("keydown.return-tab");
+        }
+    };
+
+    $(document).ready(function () {
+        return_tab.init($("#myform"));
+
+    });
+</script>
+
+</body>
+</html>

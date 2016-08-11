@@ -7,26 +7,36 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/ax5ui/ax5core/master/dist/ax5core.min.js"></script>
     <script type="text/javascript" src="jquery.tabbable.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/axisj/axisj/master/ui/arongi/AXJ.min.css">
+    <script type="text/javascript" src="https://cdn.rawgit.com/axisj/axisj/master/dist/AXJ.min.js"></script>
 </head>
 <body style="padding: 20px;">
 
 <form id="myform" onsubmit="return false;">
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" placeholder="Name"/>
+        <input type="text" class="form-control" placeholder="Name" id="imcustom1"/>
     </div>
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" placeholder="Name"/>
+        <select class="form-control" id="ax-select">
+            <option value="0">000000</option>
+            <option value="0">000000</option>
+        </select>
     </div>
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" placeholder="Name"/>
+        <input type="text" class="form-control" placeholder="Name" id="ax-date"/>
     </div>
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" placeholder="Name"/>
+        <input type="text" class="form-control" placeholder="Name" id="imcustom2"/>
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-control" placeholder="Name" id="ax-selector"/>
     </div>
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
@@ -56,15 +66,26 @@
 <script>
     var return_tab = {
         "init": function (parent) {
+
             parent.on("keydown.return-tab", "input, select", function (e) {
                 var useTab = this.getAttribute("data-return-tab");
-                if (useTab == "false") return this;
-                if (ax5.info.eventKeys.RETURN == e.which) {
+                var nextFocusElementId = this.getAttribute("data-return-tab-next-focus-id");
+                var prevFocusElementId = this.getAttribute("data-return-tab-prev-focus-id");
+                if (ax5.info.eventKeys.RETURN == e.which && useTab == "false") return this;
+                if (ax5.info.eventKeys.RETURN == e.which || ax5.info.eventKeys.TAB == e.which) {
                     ax5.util.stopEvent(e);
                     if (e.shiftKey) {
-                        $.focusPrev();
+                        if(prevFocusElementId){
+                            $("#" + prevFocusElementId).focus();
+                        }else {
+                            $.focusPrev();
+                        }
                     } else {
-                        $.focusNext();
+                        if(nextFocusElementId){
+                            $("#" + nextFocusElementId).focus();
+                        }else {
+                            $.focusNext();
+                        }
                     }
                 }
             });
@@ -74,7 +95,16 @@
         }
     };
 
-    $(document).ready(function () {
+    $(document.body).ready(function () {
+
+        $("#ax-selector").bindSelector({
+            options: []
+        })
+        $("#ax-select").bindSelect();
+        $("#ax-date").bindDate();
+
+        return_tab.init($("#myform"));
+
         $('[data-return-tab="on"]').click(function(){
             return_tab.init($("#myform"));
         });
